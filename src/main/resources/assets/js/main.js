@@ -1,37 +1,38 @@
 (function($) {
     'use strict';
     // Variables
-    var main_menu = $('#main-menu');
+    var mainMenu = $('#main-menu');
     var portfolioGrid = $('#portfolio-container');
     var portfolioSlider = $('#portfolio-slider');
-    var kraft_carousel = $('.kraft-carousel');
+    var carousel = $('.carousel');
     var contactForm = $('#contact-form');
 
     // Superfish Init
-    $(main_menu).superfish({
+    $(mainMenu).superfish({
         popUpSelector: 'ul',
         delay: 250,
         speed: 350
     });
+
     // Menu Functions
     function menuTrigger() {
         var menu_trigger = $('#menu-trigger');
         menu_trigger.on('click', (function() {
             $(this).toggleClass('open');
-            main_menu.toggleClass('display-menu');
+            mainMenu.toggleClass('display-menu');
         }));
     }
 
     function menuChildren() {
-        var level_two = main_menu.find('ul > li > ul');
+        var level_two = mainMenu.find('ul > li > ul');
         var level_three = level_two.find('li > ul');
-        main_menu.find('ul li:has(ul)').addClass('has-child');
+        mainMenu.find('ul li:has(ul)').addClass('has-child');
         level_two.addClass('level-two');
         level_three.addClass('level-three');
     }
 
     function dropdownInvert() {
-        var submenus = main_menu.find('ul ul');
+        var submenus = mainMenu.find('ul ul');
         submenus.each(function(index, element) {
             var menuDropdown = $(element);
             var windowWidth = $(window).width();
@@ -46,8 +47,8 @@
 
     function initDropdown() {
         if ($().superfish) {
-            if (main_menu.has('ul ul')) {
-                var submenus = main_menu.find('ul ul');
+            if (mainMenu.has('ul ul')) {
+                var submenus = mainMenu.find('ul ul');
                 submenus.css('display', 'block');
                 dropdownInvert();
                 submenus.css('display', '');
@@ -56,7 +57,7 @@
     }
 
     // Carousel
-    kraft_carousel.each(function() {
+    carousel.each(function() {
         var carousel = $(this);
         carousel.owlCarousel({
             autoplay: (carousel.data('autoplay') == null) ? false : carousel.data('autoplay'),
@@ -110,42 +111,40 @@
             'email': contactForm.find('input[name=email]').val(),
             'message': contactForm.find('textarea[name=message]').val()
         };
-        // process the form
+
         $.ajax({
             type: 'POST',
-            url: 'include/contact.php',
+            url: '/api/v1/contact',
             data: formData,
             dataType: 'json',
             encode: true
-        })
-            // using the done promise callback
-            .done(function(data) {
-                // here we will handle errors and validation messages
-                if (!data.success) {
-                    // handle errors for name
-                    if (data.errors.name) {
-                        name_error.toggleClass('validation-error');
-                    }
-                    // handle errors for email
-                    if (data.errors.email) {
-                        email_error.toggleClass('validation-error');
-                    }
-                    // handle errors for message
-                    if (data.errors.message) {
-                        message_error.toggleClass('validation-error');
-                    }
-                    // mail
-                    if (data.errors.mail_error) {
-                        contact_failed.toggleClass('validation-error');
-                    }
-                } else {
-                    contact_success.toggleClass('validated');
+        }).done(function(data) {
+            if (!data.success) {
+                // handle errors for name
+                if (data.errors.name) {
+                    name_error.toggleClass('validation-error');
                 }
-                form_process.fadeOut();
-            }).fail(function(data) {
+                // handle errors for email
+                if (data.errors.email) {
+                    email_error.toggleClass('validation-error');
+                }
+                // handle errors for message
+                if (data.errors.message) {
+                    message_error.toggleClass('validation-error');
+                }
+                // mail
+                if (data.errors.mail_error) {
+                    contact_failed.toggleClass('validation-error');
+                }
+            } else {
+                contact_success.toggleClass('validated');
+            }
+            form_process.fadeOut();
+        }).fail(function(data) {
             form_process.fadeOut();
             contact_failed.toggleClass('validation-error');
         });
+
         event.preventDefault();
     });
 
@@ -227,6 +226,7 @@
         lightboxTitleSrc: 'data-title',
         lightboxCounter: '<div class="cbp-popup-lightbox-counter">{{current}} of {{total}}</div>',
     });
+
     menuChildren();
     menuTrigger();
     initDropdown();

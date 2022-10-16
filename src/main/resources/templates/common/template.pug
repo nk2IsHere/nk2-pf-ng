@@ -7,8 +7,8 @@ html(lang='en-US')
 
         link(rel='icon', type='image/jpg', href='/assets/images/favicon.png')
         link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700', rel='stylesheet')
-        link(href='/assets/css/bootstrap.css', rel='stylesheet', type='text/css')
-        link(href='/assets/css/cubeportfolio.css', rel='stylesheet', type='text/css')
+        link(href='/assets/css/bootstrap.min.css', rel='stylesheet', type='text/css')
+        link(href='/assets/css/cubeportfolio.min.css', rel='stylesheet', type='text/css')
         link(href='/assets/css/style.css', rel='stylesheet', type='text/css')
 
         if context
@@ -25,13 +25,13 @@ html(lang='en-US')
                     .row
                     .col-xs-12.col-sm-6
                         .copyrights
-                            p= context.getResourceById("eu.nk2.pf.common/versionPrefix").versionPrefix + "0.0.1"
+                            p= context.getResourceById("eu.nk2.pf.common/version").version
                     .col-xs-12.col-sm-6
                         .footer-socials
                             each linkResource in context.listResourcesByIdAndType("*/*#ui-footer", "LinkResource")
                                 a(href=linkResource.value)= linkResource.name
 
         script(src='/assets/js/jquery-1.12.4.min.js')
-        script(src='/assets/js/superfish.js')
+        script(src='/assets/js/superfish.min.js')
         script(src='/assets/js/cubeportfolio.min.js')
         script(src='/assets/js/main.js')

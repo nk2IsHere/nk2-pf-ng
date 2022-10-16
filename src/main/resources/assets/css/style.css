@@ -647,17 +647,17 @@ blockquote {
 /*-----------------------------------------------------------
     Carousel
 -------------------------------------------------------------*/
-.kraft-carousel .owl-nav {
+.carousel .owl-nav {
   display: none;
 }
-.kraft-carousel .owl-dots {
+.carousel .owl-dots {
   padding-bottom: 15px;
   position: absolute;
   width: 100%;
   bottom: 0;
   margin-top: 0;
 }
-.kraft-carousel .owl-dots .owl-dot span {
+.carousel .owl-dots .owl-dot span {
   background-color: #2c2c2c;
   opacity: .4;
   margin: 0 7px;
@@ -665,11 +665,11 @@ blockquote {
   height: 14px;
   border-radius: 0;
 }
-.kraft-carousel .owl-dots .owl-dot span:hover {
+.carousel .owl-dots .owl-dot span:hover {
   background-color: #2c2c2c;
   opacity: 1;
 }
-.kraft-carousel .owl-dots .owl-dot.active span {
+.carousel .owl-dots .owl-dot.active span {
   background-color: #2c2c2c;
   opacity: 1;
 }
@@ -1600,5 +1600,3 @@ textarea {
     padding-top: 50px;
   }
 }
-
-/*# sourceMappingURL=style.css.map */
