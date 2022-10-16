@@ -227,6 +227,21 @@
         lightboxCounter: '<div class="cbp-popup-lightbox-counter">{{current}} of {{total}}</div>',
     });
 
+    (function () {
+        var viewerImagesContainer = document.getElementsByClassName('viewer-images');
+        if(viewerImagesContainer.length > 0) {
+            new Viewer(
+                viewerImagesContainer[0],
+                {
+                    button: false,
+                    navbar: false,
+                    title: false,
+                    toolbar: false
+                }
+            );
+        }
+    })();
+
     menuChildren();
     menuTrigger();
     initDropdown();

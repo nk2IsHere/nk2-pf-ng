@@ -37,11 +37,11 @@ block page
                         .button.solid.margin-bottom-10
                             a(href=link.value)= link.name
             .col-sm-12.margin-top-20
-                #portfolio-container.cbp(data-layoutmode='grid', data-gaphorizontal='30', data-gapvertical='30', data-large-desktop='3', data-medium-desktop='3', data-tablet='2')
+                #portfolio-container.viewer-images.cbp(data-layoutmode='grid', data-gaphorizontal='30', data-gapvertical='30', data-large-desktop='3', data-medium-desktop='3', data-tablet='2')
                     each image in context.listResourcesByIdAndType("*/*#ui-details", "ImageResource")
                         .cbp-item
                             .cbp-item-wrapper
-                                .cbp-caption-defaultWrap
+                                .cbp-caption-defaultWrap.viewer-image
                                     img(src='/assets/images/' + image.path, alt='')
             each video in context.listResourcesByIdAndType("*/*#ui-details", "VideoResource")
                 .col-sm-12.margin-top-20
