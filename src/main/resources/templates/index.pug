@@ -1,0 +1,29 @@
+extends common/template
+
+block page
+    .container
+        .row
+            .col-sm-12
+                .page-title
+                    h1.heading
+                        b= context.getResourceById("eu.nk2.pf.common/self").name
+                        br
+                        | #{context.getResourceById("eu.nk2.pf.common/self").profession}
+                .portfolio-wrap
+
+                #filters-container.cbp-l-filters-text.text-left
+                    .cbp-filter-item-active.cbp-filter-item(data-filter='*') All
+                    each category in context.getResourceById("eu.nk2.pf.common/projectCategories").categories
+                        .cbp-filter-item(data-filter='.' + category.replace(" ", "-"))= category
+                
+                #portfolio-container.cbp(data-layoutmode='grid', data-gaphorizontal='30', data-gapvertical='30', data-captionanimation='minimal', data-animationtype='quicksand')
+                    each project in context.sortedByDescending(context.listResourcesById("eu.nk2.pf.project/*"), "year")
+                        .cbp-item(class=context.replaceInStrings(project.categories, " ", "-"))
+                            a.cbp-caption(href='/details/' + project.id)
+                                .cbp-caption-defaultWrap
+                                    img(src='/assets/images' + context.getResourceByIdAndType(project.id + "/*#ui-index", "ImageResource").path, alt='')
+                                .cbp-caption-activeWrap
+                                    .cbp-l-caption-alignLeft
+                                        .cbp-l-caption-body
+                                            .cbp-l-caption-title= project.name
+                                            .cbp-l-caption-desc= context.getResourceByIdAndType(project.id + "/*#ui-index", "ProjectMetadataResource").shortDescription

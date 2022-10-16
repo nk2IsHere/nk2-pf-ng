@@ -1,0 +1,7 @@
+portfolio:
+  web-port: 3030
+  mongo-uri: mongodb://localhost:27017/portfolio
+  token-password: "develop"
+
+pug:
+  view-render-exceptions: true

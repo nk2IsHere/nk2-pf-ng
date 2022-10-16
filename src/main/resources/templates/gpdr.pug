@@ -1,0 +1,82 @@
+extends common/template
+
+block page
+    .container
+        .row
+            .col-sm-12
+                .page-title
+                    h1.heading
+                        b= context.getResourceById("eu.nk2.pf.common/self").name
+                        br
+                        | #{context.getResourceById("eu.nk2.pf.common/self").profession}
+                    div.margin-top-20
+                        a(href="/").heading-link ⬅️ Go back
+                .portfolio-wrap
+            .col-sm-12
+                .project-title
+                    h1= context.getResourceById("eu.nk2.pf.project/*").name
+                    p= context.joinStrings(context.getResourceById("eu.nk2.pf.project/*").categories, ", ")
+            .col-sm-12
+                .project-desc
+                    each gpdrInformation in context.listResourcesByIdAndType("*/*#ui-gpdr", "ProjectGpdrMetadataResource")
+                        if gpdrInformation.language == "RU"
+                            p
+                                strong
+                                    span(lang='RU') Согласие на обработку персональных данных для физических лиц
+                            p
+                                span(lang='RU') Пользователь, оставляя заявку в приложении «#{gpdrInformation.name}», принимает настоящее Согласие на обработку персональных данных (далее – Согласие).  Действуя свободно, своей волей и в своем интересе, а также подтверждая свою дееспособность, Пользователь дает свое согласие на обработку своих персональных данных со следующими условиями:
+                            p
+                                span(lang='RU') 1. Данное Согласие дается на обработку персональных данных, как без использования средств автоматизации, так и с их использованием.
+                            p
+                                span(lang='RU') 2. Согласие дается на обработку следующих моих персональных данных:
+                            p
+                                span(lang='RU') Персональные данные, не являющиеся специальными или биометрическими:
+                            p
+                                span(lang='RU')= gpdrInformation.using
+                            p
+                                span(lang='RU') 3. Персональные данные не являются общедоступными.
+                            p
+                                span(lang='RU') 4. Цель обработки персональных данных: обработка входящих запросов физических лиц с целью оказания консультирования; аналитики действий физического лица в приложении и функционирования приложения.
+                            p
+                                span(lang='RU') 5. Основанием для обработки персональных данных является: ст. 24 Конституции Российской Федерации; ст.6 Федерального закона №152-ФЗ «О персональных данных»; настоящее согласие на обработку персональных данных.
+                            p
+                                span(lang='RU') 6. В ходе обработки с персональными данными будут совершены следующие действия:
+                            p
+                                span(lang='RU') Сбор, запись, систематизация, накопление, хранение, уточнение (обновление, изменение); извлечение; использование; передача (распространение, предоставление, доступ); блокирование; удаление.
+                            p
+                                span(lang='RU') 7. Персональные данные обрабатываются до отписки физического лица от рекламных и новостных рассылок. Также обработка персональных данных может быть прекращена по запросу субъекта персональных данных.
+                            p
+                                span(lang='RU') 8. Настоящее согласие действует все время до момента прекращения обработки персональных данных, указанных в п. 7 данного Согласия.
+                            p
+                                span(lang='RU') 9. При возникновении каких-либо вопросов, касающихся обработки персональных данных пользователь может обратиться к администрации сайта по электронной почте: #{gpdrInformation.email}
+                        if gpdrInformation.language == "EN"
+                            br
+                            p
+                                strong
+                                    span(lang='EN') Consent to the processing of personal data for individuals
+                            p
+                                span(lang='EN') The user, leaving a request in the application "#{gpdrInformation.name}", accepts this Consent to the processing of personal data (hereinafter - the Consent). Acting freely, of his own free will and in his interest, and also confirming his legal capacity, the User gives his consent to the processing of his personal data with the following conditions:
+                            p
+                                span(lang='EN') 1. This Consent is given to the processing of personal data, both without the use of automation tools, and with their use.
+                            p
+                                span(lang='EN') 2. Consent is given to the processing of the following my personal data:
+                            p
+                                span(lang='EN') Personal data that is not special or biometric:
+                            p
+                                span(lang='EN')= gpdrInformation.using
+                            p
+                                span(lang='EN') 3. Personal data is not publicly available.
+                            p
+                                span(lang='EN') 4. The purpose of processing personal data: processing incoming requests from individuals in order to provide advice; analytics of the actions of an individual in the application and the functioning of the application.
+                            p
+                                span(lang='EN') 5. The basis for the processing of personal data is: Art. 24 of the Constitution of the Russian Federation; Article 6 of the Federal Law No. 152-FZ “On Personal Data"; Recital 32 of the GDPR; Art. 25 of the COPPA; This consent to the processing of personal data.
+                            p
+                                span(lang='EN') 6. During the processing of personal data, the following actions will be performed:
+                            p
+                                span(lang='EN') Collection, recording, systematization, accumulation, storage, clarification (updating, changing); extraction; using; transmission (distribution, provision, access); blocking; removal.
+                            p
+                                span(lang='EN') 7. Personal data is processed before an individual unsubscribes from advertising and newsletters. Also, the processing of personal data may be terminated at the request of the subject of personal data.
+                            p
+                                span(lang='EN') 8. This consent is valid all the time until the termination of the processing of personal data specified in clause 7 of this Consent.
+                            p
+                                span(lang='EN') 9. If you have any questions regarding the processing of personal data, the user can contact the site administration by e-mail: #{gpdrInformation.email}

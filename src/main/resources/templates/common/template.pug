@@ -1,0 +1,37 @@
+doctype html
+html(lang='en-US')
+    head
+        meta(http-equiv='content-type', content='text/html; charset=utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        meta(name='author', content='nk2')
+
+        link(rel='icon', type='image/jpg', href='/assets/images/favicon.png')
+        link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700', rel='stylesheet')
+        link(href='/assets/css/bootstrap.css', rel='stylesheet', type='text/css')
+        link(href='/assets/css/cubeportfolio.css', rel='stylesheet', type='text/css')
+        link(href='/assets/css/style.css', rel='stylesheet', type='text/css')
+
+        if context
+            title= context.getResourceById("eu.nk2.pf.common/title").title
+    body
+        #page-wrapper
+            #content-wrapper
+                #main-wrapper
+                    block page
+
+        if context
+            footer#footer.standard
+                .container
+                    .row
+                    .col-xs-12.col-sm-6
+                        .copyrights
+                            p= context.getResourceById("eu.nk2.pf.common/versionPrefix").versionPrefix + "0.0.1"
+                    .col-xs-12.col-sm-6
+                        .footer-socials
+                            each linkResource in context.listResourcesByIdAndType("*/*#ui-footer", "LinkResource")
+                                a(href=linkResource.value)= linkResource.name
+
+        script(src='/assets/js/jquery-1.12.4.min.js')
+        script(src='/assets/js/superfish.js')
+        script(src='/assets/js/cubeportfolio.min.js')
+        script(src='/assets/js/main.js')

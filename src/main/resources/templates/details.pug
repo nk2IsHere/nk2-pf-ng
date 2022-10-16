@@ -1,0 +1,49 @@
+extends common/template
+
+block page
+    .container
+        .row
+            .col-sm-12
+                .page-title
+                    h1.heading
+                        b= context.getResourceById("eu.nk2.pf.common/self").name
+                        br
+                        | #{context.getResourceById("eu.nk2.pf.common/self").profession}
+                    div.margin-top-20
+                        a(href="/").heading-link ⬅️ Go back
+                .portfolio-wrap
+            .col-sm-12
+                .project-title
+                    h1= context.getResourceById("eu.nk2.pf.project/*").name
+                    p= context.joinStrings(context.getResourceById("eu.nk2.pf.project/*").categories, ", ")
+            .col-sm-9
+                .project-desc
+                    each paragraph in context.getResourceByIdAndType("*/*#ui-details", "ProjectMetadataResource").description
+                        p= paragraph
+            .col-sm-3
+                ul.project-meta.margin-top-15.margin-bottom-20
+                    li
+                        span Client
+                        = context.getResourceByIdAndType("*/*#ui-details", "ProjectMetadataResource").client
+                    li
+                        span Year
+                        = context.getResourceById("eu.nk2.pf.project/*").year
+                    li.project-share
+                        span TechStack
+                        each technology in context.getResourceByIdAndType("*/*#ui-details", "ProjectMetadataResource").technologies
+                            a= technology
+                            br
+                    each link in context.listResourcesByIdAndType("*/*#ui-details", "LinkResource")
+                        .button.solid.margin-bottom-10
+                            a(href=link.value)= link.name
+            .col-sm-12.margin-top-20
+                #portfolio-container.cbp(data-layoutmode='grid', data-gaphorizontal='30', data-gapvertical='30', data-large-desktop='3', data-medium-desktop='3', data-tablet='2')
+                    each image in context.listResourcesByIdAndType("*/*#ui-details", "ImageResource")
+                        .cbp-item
+                            .cbp-item-wrapper
+                                .cbp-caption-defaultWrap
+                                    img(src='/assets/images/' + image.path, alt='')
+            each video in context.listResourcesByIdAndType("*/*#ui-details", "VideoResource")
+                .col-sm-12.margin-top-20
+                    .project-video.embed-responsive.embed-responsive-16by9
+                        iframe.embed-responsive-item(src=video.path height="500" allowfullscreen="")
