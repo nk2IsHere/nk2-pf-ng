@@ -14,11 +14,13 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.LimitOperation
 import org.springframework.data.mongodb.core.aggregation.SkipOperation
 import org.springframework.data.mongodb.core.aggregation.SortOperation
+import org.springframework.data.mongodb.core.findAllAndRemove
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.MongoId
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Query.query
+import org.springframework.data.mongodb.core.query.inValues
 import reactor.core.publisher.Flux
 
 @Document(collection = "project")
@@ -141,4 +143,15 @@ suspend fun projectServiceSaveAll(projects: List<Project>): Try<Flow<Project>> =
         Flux
             .fromIterable(projects)
             .flatMap { mongoTemplate.save(it) }
+    }
+
+context(ProjectServiceDependencies)
+suspend fun projectServiceDeleteByIds(ids: List<String>): Try<Flow<Project>> =
+    fluxTry {
+        mongoTemplate
+            .findAllAndRemove(query(
+                Criteria
+                    .where("id")
+                    .inValues(ids)
+            ))
     }

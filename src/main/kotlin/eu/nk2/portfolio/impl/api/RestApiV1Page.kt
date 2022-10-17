@@ -20,7 +20,7 @@ fun restApiV1PageRouter() =
         filter(authorizationFilter(listOf(
             AuthenticationFilterConfiguration(
                 "/api/v1/page",
-                methodMode = AuthenticationFilterConfiguration.SomeMethods(listOf(HttpMethod.PUT))
+                methodMode = AuthenticationFilterConfiguration.SomeMethods(listOf(HttpMethod.PUT, HttpMethod.DELETE))
             )
         )))
 
@@ -47,12 +47,22 @@ fun restApiV1PageRouter() =
 
         PUT("/api/v1/page") {
             val pagesRequest = fluxTry { it.bodyToFlux<Page>() }
-            val savedProjects = async {
-                pagesRequest
-                    .flatMap { pageServiceSaveAll(it.toList()) }
+            val savedPages = async {
+                pagesRequest.flatMap { pageServiceSaveAll(it.toList()) }
             }
 
-            savedProjects
+            savedPages
+                .await()
+                .toApiResponse()
+        }
+
+        DELETE("/api/v1/page") {
+            val pagesPathsRequest = fluxTry { it.bodyToFlux<String>() }
+            val deletedPages = async {
+                pagesPathsRequest.flatMap { pageServiceDeleteByPaths(it.toList()) }
+            }
+
+            deletedPages
                 .await()
                 .toApiResponse()
         }

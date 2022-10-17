@@ -18,7 +18,9 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query.query
 import reactor.core.publisher.Flux
 import org.springframework.data.mongodb.core.find
+import org.springframework.data.mongodb.core.findAllAndRemove
 import org.springframework.data.mongodb.core.mapping.FieldType
+import org.springframework.data.mongodb.core.query.inValues
 import java.util.regex.Pattern
 
 @NoArgsConstructor
@@ -245,4 +247,15 @@ suspend fun resourceServiceSaveAll(resources: List<Resource>): Try<Flow<Resource
         Flux
             .fromIterable(resources)
             .flatMap { mongoTemplate.save(it) }
+    }
+
+context(ResourceServiceDependencies)
+suspend fun resourceServiceDeleteByIds(ids: List<ResourceId>): Try<Flow<Resource>> =
+    fluxTry {
+        mongoTemplate
+            .findAllAndRemove(query(
+                Criteria
+                    .where("id")
+                    .inValues(ids)
+            ))
     }

@@ -28,7 +28,7 @@ fun restApiV1ResourceRouter() =
         filter(authorizationFilter(listOf(
             AuthenticationFilterConfiguration(
                 "/api/v1/resource",
-                methodMode = AuthenticationFilterConfiguration.SomeMethods(listOf(HttpMethod.PUT))
+                methodMode = AuthenticationFilterConfiguration.SomeMethods(listOf(HttpMethod.PUT, HttpMethod.DELETE))
             )
         )))
 
@@ -57,11 +57,21 @@ fun restApiV1ResourceRouter() =
             val resourcesQueryRequest = monoTryOption { it.bodyToMono<RestApiV1ResourceQueryRequest>() }
             val resourcesQueryResponse = async {
                 resourcesQueryRequest
-                    .popLeft()
-                    .flatMapRight { resourceQueryServiceQuery(it.resourceIds, it.variables) }
+                    .flatMapTry { resourceQueryServiceQuery(it.resourceIds, it.variables) }
             }
 
             resourcesQueryResponse
+                .await()
+                .toApiResponse()
+        }
+
+        DELETE("/api/v1/resource") {
+            val resourcesIdsRequest = fluxTry { it.bodyToFlux<ResourceId>() }
+            val deletedResources = async {
+                resourcesIdsRequest.flatMap { resourceServiceDeleteByIds(it.toList()) }
+            }
+
+            deletedResources
                 .await()
                 .toApiResponse()
         }

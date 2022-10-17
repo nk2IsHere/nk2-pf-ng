@@ -23,7 +23,7 @@ fun restApiV1ProjectRouter() =
         filter(authorizationFilter(listOf(
             AuthenticationFilterConfiguration(
                 "/api/v1/project",
-                methodMode = AuthenticationFilterConfiguration.SomeMethods(listOf(HttpMethod.PUT))
+                methodMode = AuthenticationFilterConfiguration.SomeMethods(listOf(HttpMethod.PUT, HttpMethod.DELETE))
             )
         )))
 
@@ -65,6 +65,17 @@ fun restApiV1ProjectRouter() =
             }
 
             savedProjects
+                .await()
+                .toApiResponse()
+        }
+
+        DELETE("/api/v1/project") {
+            val projectsIdsRequest = fluxTry { it.bodyToFlux<String>() }
+            val deletedProjects = async {
+                projectsIdsRequest.flatMap { projectServiceDeleteByIds(it.toList()) }
+            }
+
+            deletedProjects
                 .await()
                 .toApiResponse()
         }

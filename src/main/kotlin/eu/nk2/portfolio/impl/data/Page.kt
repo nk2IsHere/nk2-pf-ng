@@ -7,16 +7,15 @@ import kotlinx.coroutines.flow.Flow
 import org.springframework.data.annotation.Transient
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
-import org.springframework.data.mongodb.core.aggregate
-import org.springframework.data.mongodb.core.aggregation.Aggregation
-import org.springframework.data.mongodb.core.aggregation.LimitOperation
-import org.springframework.data.mongodb.core.aggregation.SkipOperation
 import org.springframework.data.mongodb.core.find
-import org.springframework.data.mongodb.core.findAll
 import org.springframework.data.mongodb.core.findById
+import org.springframework.data.mongodb.core.findAllAndRemove
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.MongoId
+import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Query.query
+import org.springframework.data.mongodb.core.query.inValues
 import reactor.core.publisher.Flux
 
 @Document(collection = "page")
@@ -85,4 +84,15 @@ suspend fun pageServiceSaveAll(pages: List<Page>): Try<Flow<Page>> =
         Flux
             .fromIterable(pages)
             .flatMap { mongoTemplate.save(it) }
+    }
+
+context(PageServiceDependencies)
+suspend fun pageServiceDeleteByPaths(paths: List<String>): Try<Flow<Page>> =
+    fluxTry {
+        mongoTemplate
+            .findAllAndRemove(query(
+                Criteria
+                    .where("path")
+                    .inValues(paths)
+            ))
     }
